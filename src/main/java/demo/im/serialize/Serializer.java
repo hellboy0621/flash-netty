@@ -1,4 +1,6 @@
-package demo.im;
+package demo.im.serialize;
+
+import demo.im.serialize.impl.JsonSerializer;
 
 public interface Serializer {
 

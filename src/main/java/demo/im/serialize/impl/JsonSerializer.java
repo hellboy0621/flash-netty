@@ -1,6 +1,8 @@
-package demo.im;
+package demo.im.serialize.impl;
 
 import cn.hutool.json.JSONUtil;
+import demo.im.serialize.Serializer;
+import demo.im.serialize.SerializerAlogorithm;
 
 import java.nio.charset.StandardCharsets;
 

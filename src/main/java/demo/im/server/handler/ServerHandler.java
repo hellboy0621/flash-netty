@@ -1,11 +1,11 @@
-package demo.im.server;
+package demo.im.server.handler;
 
-import demo.im.packet.LoginRequestPacket;
-import demo.im.packet.LoginResponsePacket;
-import demo.im.packet.MessageRequestPacket;
-import demo.im.packet.MessageResponsePacket;
-import demo.im.packet.Packet;
-import demo.im.packet.PacketCodec;
+import demo.im.protocol.request.LoginRequestPacket;
+import demo.im.protocol.response.LoginResponsePacket;
+import demo.im.protocol.request.MessageRequestPacket;
+import demo.im.protocol.response.MessageResponsePacket;
+import demo.im.protocol.Packet;
+import demo.im.protocol.PacketCodec;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;

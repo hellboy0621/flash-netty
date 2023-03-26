@@ -1,8 +1,8 @@
-package demo.im;
+package demo.im.attribute;
 
 import io.netty.util.AttributeKey;
 
-public interface Attribute {
+public interface Attributes {
 
     AttributeKey<Boolean> LOGIN = AttributeKey.newInstance("login");
 }

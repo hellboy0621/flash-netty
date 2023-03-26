@@ -1,4 +1,4 @@
-package demo.im.packet;
+package demo.im.protocol;
 
 import lombok.Builder;
 import lombok.Data;

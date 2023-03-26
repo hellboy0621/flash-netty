@@ -1,9 +1,13 @@
-package demo.im.packet;
+package demo.im.protocol;
 
 import cn.hutool.core.map.MapUtil;
-import demo.im.Command;
-import demo.im.JsonSerializer;
-import demo.im.Serializer;
+import demo.im.protocol.command.Command;
+import demo.im.serialize.impl.JsonSerializer;
+import demo.im.serialize.Serializer;
+import demo.im.protocol.request.LoginRequestPacket;
+import demo.im.protocol.response.LoginResponsePacket;
+import demo.im.protocol.request.MessageRequestPacket;
+import demo.im.protocol.response.MessageResponsePacket;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 

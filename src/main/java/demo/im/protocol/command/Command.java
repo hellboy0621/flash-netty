@@ -1,4 +1,4 @@
-package demo.im;
+package demo.im.protocol.command;
 
 public interface Command {
 

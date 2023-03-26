@@ -1,4 +1,4 @@
-package demo.im;
+package demo.im.serialize;
 
 public interface SerializerAlogorithm {
 

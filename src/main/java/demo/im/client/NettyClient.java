@@ -1,7 +1,8 @@
 package demo.im.client;
 
-import demo.im.packet.MessageRequestPacket;
-import demo.im.packet.PacketCodec;
+import demo.im.client.handler.ClientHandler;
+import demo.im.protocol.request.MessageRequestPacket;
+import demo.im.protocol.PacketCodec;
 import demo.im.util.LoginUtil;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;

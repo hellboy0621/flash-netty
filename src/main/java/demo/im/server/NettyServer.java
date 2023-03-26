@@ -1,5 +1,6 @@
 package demo.im.server;
 
+import demo.im.server.handler.ServerHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;

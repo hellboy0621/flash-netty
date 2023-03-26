@@ -1,10 +1,10 @@
-package demo.im.client;
+package demo.im.client.handler;
 
-import demo.im.packet.LoginRequestPacket;
-import demo.im.packet.LoginResponsePacket;
-import demo.im.packet.MessageResponsePacket;
-import demo.im.packet.Packet;
-import demo.im.packet.PacketCodec;
+import demo.im.protocol.request.LoginRequestPacket;
+import demo.im.protocol.response.LoginResponsePacket;
+import demo.im.protocol.response.MessageResponsePacket;
+import demo.im.protocol.Packet;
+import demo.im.protocol.PacketCodec;
 import demo.im.util.LoginUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;

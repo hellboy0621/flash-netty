@@ -1,6 +1,7 @@
-package demo.im.packet;
+package demo.im.protocol.response;
 
-import demo.im.Command;
+import demo.im.protocol.command.Command;
+import demo.im.protocol.Packet;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
