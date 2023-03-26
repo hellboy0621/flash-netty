@@ -1,11 +1,12 @@
 package demo.im.client;
 
-import demo.im.client.handler.ClientHandler;
+import demo.im.client.handler.LoginResponseHandler;
+import demo.im.client.handler.MessageResponseHandler;
+import demo.im.codec.PacketDecoder;
+import demo.im.codec.PacketEncoder;
 import demo.im.protocol.request.MessageRequestPacket;
-import demo.im.protocol.PacketCodec;
 import demo.im.util.LoginUtil;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -32,7 +33,10 @@ public class NettyClient {
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel ch) throws Exception {
-                        ch.pipeline().addLast(new ClientHandler());
+                        ch.pipeline().addLast(new PacketDecoder());
+                        ch.pipeline().addLast(new LoginResponseHandler());
+                        ch.pipeline().addLast(new MessageResponseHandler());
+                        ch.pipeline().addLast(new PacketEncoder());
                     }
                 });
         connect(b, "localhost", 8080, MAX_RETRY);
@@ -68,8 +72,7 @@ public class NettyClient {
                     MessageRequestPacket messageRequestPacket = MessageRequestPacket.builder()
                             .message(line)
                             .build();
-                    ByteBuf byteBuf = PacketCodec.INSTANCE.encode(messageRequestPacket);
-                    channel.writeAndFlush(byteBuf);
+                    channel.writeAndFlush(messageRequestPacket);
                 }
             }
         }).start();

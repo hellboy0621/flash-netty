@@ -33,18 +33,15 @@ public class PacketCodec {
         SERIALIZER_MAP.put(jsonSerializer.getSerializerAlgorithm(), jsonSerializer);
     }
 
-    public ByteBuf encode(Packet packet) {
-        ByteBuf byteBuf = ByteBufAllocator.DEFAULT.ioBuffer();
+    public void encode(ByteBuf out, Packet packet) {
         byte[] bytes = Serializer.DEFAULT.serialize(packet);
 
-        byteBuf.writeInt(MAGIC_NUMBER);
-        byteBuf.writeByte(packet.getVersion());
-        byteBuf.writeByte(Serializer.DEFAULT.getSerializerAlgorithm());
-        byteBuf.writeByte(packet.getCommand());
-        byteBuf.writeInt(bytes.length);
-        byteBuf.writeBytes(bytes);
-
-        return byteBuf;
+        out.writeInt(MAGIC_NUMBER);
+        out.writeByte(packet.getVersion());
+        out.writeByte(Serializer.DEFAULT.getSerializerAlgorithm());
+        out.writeByte(packet.getCommand());
+        out.writeInt(bytes.length);
+        out.writeBytes(bytes);
     }
 
     public Packet decode(ByteBuf byteBuf) {
