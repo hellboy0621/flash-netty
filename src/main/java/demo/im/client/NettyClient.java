@@ -4,6 +4,7 @@ import demo.im.client.handler.LoginResponseHandler;
 import demo.im.client.handler.MessageResponseHandler;
 import demo.im.codec.PacketDecoder;
 import demo.im.codec.PacketEncoder;
+import demo.im.codec.Spliter;
 import demo.im.protocol.request.MessageRequestPacket;
 import demo.im.util.LoginUtil;
 import io.netty.bootstrap.Bootstrap;
@@ -33,6 +34,7 @@ public class NettyClient {
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel ch) throws Exception {
+                        ch.pipeline().addLast(new Spliter());
                         ch.pipeline().addLast(new PacketDecoder());
                         ch.pipeline().addLast(new LoginResponseHandler());
                         ch.pipeline().addLast(new MessageResponseHandler());
