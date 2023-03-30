@@ -5,8 +5,9 @@ import demo.im.client.handler.MessageResponseHandler;
 import demo.im.codec.PacketDecoder;
 import demo.im.codec.PacketEncoder;
 import demo.im.codec.Spliter;
+import demo.im.protocol.request.LoginRequestPacket;
 import demo.im.protocol.request.MessageRequestPacket;
-import demo.im.util.LoginUtil;
+import demo.im.util.SessionUtil;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -64,19 +65,36 @@ public class NettyClient {
     }
 
     private static void startConsoleThread(Channel channel) {
+        final Scanner scanner = new Scanner(System.in);
+        final LoginRequestPacket loginRequestPacket = new LoginRequestPacket();
+
         new Thread(() -> {
             while (!Thread.interrupted()) {
-                if (LoginUtil.hasLogin(channel)) {
-                    log.info("input message send to server: ");
-                    Scanner sc = new Scanner(System.in);
-                    String line = sc.nextLine();
+                if (!SessionUtil.hasLogin(channel)) {
+                    log.info("please input your user name to login:");
+                    String userName = scanner.next();
+                    loginRequestPacket.setUsername(userName);
+                    loginRequestPacket.setPassword("pwd");
 
-                    MessageRequestPacket messageRequestPacket = MessageRequestPacket.builder()
-                            .message(line)
-                            .build();
-                    channel.writeAndFlush(messageRequestPacket);
+                    channel.writeAndFlush(loginRequestPacket);
+                    waitForLoginResponse();
+                } else {
+                    String toUserId = scanner.next();
+                    String message = scanner.next();
+                    channel.writeAndFlush(MessageRequestPacket.builder()
+                            .toUserId(toUserId)
+                            .message(message)
+                            .build());
                 }
             }
         }).start();
+    }
+
+    private static void waitForLoginResponse() {
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (InterruptedException e) {
+            log.error("", e);
+        }
     }
 }

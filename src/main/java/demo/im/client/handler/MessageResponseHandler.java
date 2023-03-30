@@ -9,6 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 public class MessageResponseHandler extends SimpleChannelInboundHandler<MessageResponsePacket> {
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, MessageResponsePacket messageResponsePacket) throws Exception {
-        log.info("receive msg from server : {}", messageResponsePacket.getMessage());
+        String fromUserId = messageResponsePacket.getFromUserId();
+        String fromUserName = messageResponsePacket.getFromUserName();
+        log.info("{} : {} -> {}", fromUserId, fromUserName,
+                messageResponsePacket.getMessage());
     }
 }

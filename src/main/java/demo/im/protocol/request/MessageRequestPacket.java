@@ -11,6 +11,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class MessageRequestPacket extends Packet {
 
+    private String toUserId;
     private String message;
 
     @Override
