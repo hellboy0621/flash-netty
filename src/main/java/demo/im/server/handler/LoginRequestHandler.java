@@ -33,8 +33,8 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
             loginResponsePacket.setReason("account username or password error.");
         }
 
-        // ctx.channel().writeAndFlush(loginResponsePacket);
-        ctx.writeAndFlush(loginResponsePacket);
+        // ctx.writeAndFlush(loginResponsePacket); 这样功能就不正常了
+        ctx.channel().writeAndFlush(loginResponsePacket);
     }
 
     private boolean valid(demo.im.protocol.request.LoginRequestPacket loginRequestPacket) {

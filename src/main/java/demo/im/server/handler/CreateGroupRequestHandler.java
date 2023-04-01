@@ -41,7 +41,8 @@ public class CreateGroupRequestHandler extends SimpleChannelInboundHandler<Creat
                 .build();
 
         // 4 给每个客户端发送拉群通知
-        channelGroup.writeAndFlush(createGroupRequestPacket);
+        // channelGroup.writeAndFlush(createGroupRequestPacket); 这里找了好长时间，原来是因为把 request 返回了，怪不得打断点都不进 responseHandler
+        channelGroup.writeAndFlush(createGroupResponsePacket);
 
         log.info("group create success, id : {}", createGroupResponsePacket.getGroupId());
         log.info("group contains userNames : {}", userNames);
