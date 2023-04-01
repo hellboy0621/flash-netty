@@ -2,6 +2,8 @@ package demo.im.protocol;
 
 import cn.hutool.core.map.MapUtil;
 import demo.im.protocol.command.Command;
+import demo.im.protocol.request.CreateGroupRequestPacket;
+import demo.im.protocol.response.CreateGroupResponsePacket;
 import demo.im.serialize.impl.JsonSerializer;
 import demo.im.serialize.Serializer;
 import demo.im.protocol.request.LoginRequestPacket;
@@ -27,6 +29,8 @@ public class PacketCodec {
         PACKET_TYPE_MAP.put(Command.LOGIN_RESPONSE, LoginResponsePacket.class);
         PACKET_TYPE_MAP.put(Command.MESSAGE_REQUEST, MessageRequestPacket.class);
         PACKET_TYPE_MAP.put(Command.MESSAGE_RESPONSE, MessageResponsePacket.class);
+        PACKET_TYPE_MAP.put(Command.CREATE_GROUP_REQUEST, CreateGroupRequestPacket.class);
+        PACKET_TYPE_MAP.put(Command.CREATE_GROUP_RESPONSE, CreateGroupResponsePacket.class);
 
         SERIALIZER_MAP = MapUtil.newHashMap();
         JsonSerializer jsonSerializer = new JsonSerializer();

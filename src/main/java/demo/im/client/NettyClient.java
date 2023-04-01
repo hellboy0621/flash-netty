@@ -1,12 +1,13 @@
 package demo.im.client;
 
+import demo.im.client.console.ConsoleCommandManager;
+import demo.im.client.console.LoginConsoleCommand;
+import demo.im.client.handler.CreateGroupResponseHandler;
 import demo.im.client.handler.LoginResponseHandler;
 import demo.im.client.handler.MessageResponseHandler;
 import demo.im.codec.PacketDecoder;
 import demo.im.codec.PacketEncoder;
 import demo.im.codec.Spliter;
-import demo.im.protocol.request.LoginRequestPacket;
-import demo.im.protocol.request.MessageRequestPacket;
 import demo.im.util.SessionUtil;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
@@ -39,6 +40,7 @@ public class NettyClient {
                         ch.pipeline().addLast(new PacketDecoder());
                         ch.pipeline().addLast(new LoginResponseHandler());
                         ch.pipeline().addLast(new MessageResponseHandler());
+                        ch.pipeline().addLast(new CreateGroupResponseHandler());
                         ch.pipeline().addLast(new PacketEncoder());
                     }
                 });
@@ -65,36 +67,19 @@ public class NettyClient {
     }
 
     private static void startConsoleThread(Channel channel) {
+        ConsoleCommandManager consoleCommandManager = new ConsoleCommandManager();
+        LoginConsoleCommand loginConsoleCommand = new LoginConsoleCommand();
         final Scanner scanner = new Scanner(System.in);
-        final LoginRequestPacket loginRequestPacket = new LoginRequestPacket();
 
         new Thread(() -> {
             while (!Thread.interrupted()) {
                 if (!SessionUtil.hasLogin(channel)) {
-                    log.info("please input your user name to login:");
-                    String userName = scanner.next();
-                    loginRequestPacket.setUsername(userName);
-                    loginRequestPacket.setPassword("pwd");
-
-                    channel.writeAndFlush(loginRequestPacket);
-                    waitForLoginResponse();
+                    loginConsoleCommand.exec(scanner, channel);
                 } else {
-                    String toUserId = scanner.next();
-                    String message = scanner.next();
-                    channel.writeAndFlush(MessageRequestPacket.builder()
-                            .toUserId(toUserId)
-                            .message(message)
-                            .build());
+                    consoleCommandManager.exec(scanner, channel);
                 }
             }
         }).start();
     }
 
-    private static void waitForLoginResponse() {
-        try {
-            TimeUnit.SECONDS.sleep(1);
-        } catch (InterruptedException e) {
-            log.error("", e);
-        }
-    }
 }

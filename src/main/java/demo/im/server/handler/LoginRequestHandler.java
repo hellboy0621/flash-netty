@@ -3,12 +3,11 @@ package demo.im.server.handler;
 import demo.im.protocol.request.LoginRequestPacket;
 import demo.im.protocol.response.LoginResponsePacket;
 import demo.im.session.Session;
+import demo.im.util.IdUtil;
 import demo.im.util.SessionUtil;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.UUID;
 
 @Slf4j
 public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginRequestPacket> {
@@ -21,7 +20,7 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
         if (valid(loginRequestPacket)) {
             // 校验成功
             loginResponsePacket.setSuccess(true);
-            String userId = randomUserId();
+            String userId = IdUtil.randomUserId();
             loginResponsePacket.setUserId(userId);
             loginResponsePacket.setUserName(loginRequestPacket.getUsername());
             log.info("client[{}] login success, userId : {}", loginRequestPacket.getUsername(), userId);
@@ -34,20 +33,17 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
             loginResponsePacket.setReason("account username or password error.");
         }
 
-        ctx.channel().writeAndFlush(loginResponsePacket);
+        // ctx.channel().writeAndFlush(loginResponsePacket);
+        ctx.writeAndFlush(loginResponsePacket);
+    }
+
+    private boolean valid(demo.im.protocol.request.LoginRequestPacket loginRequestPacket) {
+        return true;
     }
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         // 用户断线之后取消绑定
         SessionUtil.unBindSession(ctx.channel());
-    }
-
-    private String randomUserId() {
-        return UUID.randomUUID().toString().split("-")[0];
-    }
-
-    private boolean valid(demo.im.protocol.request.LoginRequestPacket loginRequestPacket) {
-        return true;
     }
 }
