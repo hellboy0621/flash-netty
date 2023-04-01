@@ -49,9 +49,9 @@ public class NettyServer {
             @Override
             public void operationComplete(Future<? super Void> future) throws Exception {
                 if (future.isSuccess()) {
-                    log.info("port[{}] bind success", port);
+                    log.info("port[{}] bind success.", port);
                 } else {
-                    log.error("port[{}] bind fail", port);
+                    log.error("port[{}] bind fail.", port);
                     bind(b, port + 1);
                 }
             }

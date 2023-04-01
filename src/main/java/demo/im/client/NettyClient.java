@@ -13,12 +13,12 @@ import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import lombok.extern.slf4j.Slf4j;
 
-import java.time.LocalDateTime;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
@@ -33,6 +33,8 @@ public class NettyClient {
         Bootstrap b = new Bootstrap();
         b.group(workerGroup)
                 .channel(NioSocketChannel.class)
+                .option(ChannelOption.SO_KEEPALIVE, true)
+                .option(ChannelOption.TCP_NODELAY, true)
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel ch) throws Exception {
@@ -54,14 +56,14 @@ public class NettyClient {
                 Channel channel = ((ChannelFuture) future).channel();
                 startConsoleThread(channel);
             } else if (retry == 0) {
-                System.out.println("retry is used, give up connect.");
+                log.info("retry is used, give up connect.");
             } else {
-                // 第几次重连
-                int order = MAX_RETRY - retry + 1;
+                int order = MAX_RETRY - retry;
                 int delay = 1 << order;
-                System.out.println(LocalDateTime.now() + " connect fail, retry: " + order);
-                b.config().group().schedule(() ->
-                        connect(b, host, port + 1, retry - 1), delay, TimeUnit.SECONDS);
+                log.info("connect fail, retry :{}", order);
+                b.config().group().schedule(() -> {
+                    connect(b, host, port + 1, retry - 1);
+                }, delay, TimeUnit.SECONDS);
             }
         });
     }
@@ -81,5 +83,4 @@ public class NettyClient {
             }
         }).start();
     }
-
 }
