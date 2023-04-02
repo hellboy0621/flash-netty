@@ -3,12 +3,14 @@ package demo.im.protocol;
 import cn.hutool.core.map.MapUtil;
 import demo.im.protocol.command.Command;
 import demo.im.protocol.request.CreateGroupRequestPacket;
+import demo.im.protocol.request.GroupMessageRequestPacket;
 import demo.im.protocol.request.JoinGroupRequestPacket;
 import demo.im.protocol.request.ListGroupMembersRequestPacket;
 import demo.im.protocol.request.LoginRequestPacket;
 import demo.im.protocol.request.MessageRequestPacket;
 import demo.im.protocol.request.QuitGroupRequestPacket;
 import demo.im.protocol.response.CreateGroupResponsePacket;
+import demo.im.protocol.response.GroupMessageResponsePacket;
 import demo.im.protocol.response.JoinGroupResponsePacket;
 import demo.im.protocol.response.ListGroupMembersResponsePacket;
 import demo.im.protocol.response.LoginResponsePacket;
@@ -44,6 +46,8 @@ public class PacketCodec {
         PACKET_TYPE_MAP.put(Command.QUIT_GROUP_RESPONSE, QuitGroupResponsePacket.class);
         PACKET_TYPE_MAP.put(Command.LIST_GROUP_MEMBERS_REQUEST, ListGroupMembersRequestPacket.class);
         PACKET_TYPE_MAP.put(Command.LIST_GROUP_MEMBERS_RESPONSE, ListGroupMembersResponsePacket.class);
+        PACKET_TYPE_MAP.put(Command.GROUP_MESSAGE_REQUEST, GroupMessageRequestPacket.class);
+        PACKET_TYPE_MAP.put(Command.GROUP_MESSAGE_RESPONSE, GroupMessageResponsePacket.class);
 
         SERIALIZER_MAP = MapUtil.newHashMap();
         JsonSerializer jsonSerializer = new JsonSerializer();

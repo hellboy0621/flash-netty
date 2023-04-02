@@ -5,6 +5,7 @@ import demo.im.codec.PacketEncoder;
 import demo.im.codec.Spliter;
 import demo.im.server.handler.AuthHandler;
 import demo.im.server.handler.CreateGroupRequestHandler;
+import demo.im.server.handler.GroupMessageRequestHandler;
 import demo.im.server.handler.JoinGroupRequestHandler;
 import demo.im.server.handler.ListGroupMembersRequestHandler;
 import demo.im.server.handler.LoginRequestHandler;
@@ -42,6 +43,7 @@ public class NettyServer {
                         ch.pipeline().addLast(new JoinGroupRequestHandler());
                         ch.pipeline().addLast(new QuitGroupRequestHandler());
                         ch.pipeline().addLast(new ListGroupMembersRequestHandler());
+                        ch.pipeline().addLast(new GroupMessageRequestHandler());
                         ch.pipeline().addLast(new PacketEncoder());
                     }
                 });
