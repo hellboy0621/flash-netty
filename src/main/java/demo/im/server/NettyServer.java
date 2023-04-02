@@ -2,7 +2,9 @@ package demo.im.server;
 
 import demo.im.codec.PacketCodecHandler;
 import demo.im.codec.Spliter;
+import demo.im.handler.IMIdleStateHandler;
 import demo.im.server.handler.AuthHandler;
+import demo.im.server.handler.HeartBeatRequestHandler;
 import demo.im.server.handler.IMHandler;
 import demo.im.server.handler.LoginRequestHandler;
 import io.netty.bootstrap.ServerBootstrap;
@@ -28,9 +30,12 @@ public class NettyServer {
                 .childHandler(new ChannelInitializer<NioSocketChannel>() {
                     @Override
                     protected void initChannel(NioSocketChannel ch) {
+                        // 空闲检测
+                        ch.pipeline().addLast(new IMIdleStateHandler());
                         ch.pipeline().addLast(new Spliter());
                         ch.pipeline().addLast(PacketCodecHandler.INSTANCE);
                         ch.pipeline().addLast(LoginRequestHandler.INSTANCE);
+                        ch.pipeline().addLast(HeartBeatRequestHandler.INSTANCE);
                         ch.pipeline().addLast(AuthHandler.INSTANCE);
                         ch.pipeline().addLast(IMHandler.INSTANCE);
                     }

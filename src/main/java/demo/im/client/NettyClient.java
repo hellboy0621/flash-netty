@@ -4,6 +4,7 @@ import demo.im.client.console.ConsoleCommandManager;
 import demo.im.client.console.LoginConsoleCommand;
 import demo.im.client.handler.CreateGroupResponseHandler;
 import demo.im.client.handler.GroupMessageResponseHandler;
+import demo.im.client.handler.HeartBeatTimerHandler;
 import demo.im.client.handler.JoinGroupResponseHandler;
 import demo.im.client.handler.ListGroupMembersResponseHandler;
 import demo.im.client.handler.LoginResponseHandler;
@@ -12,6 +13,7 @@ import demo.im.client.handler.MessageResponseHandler;
 import demo.im.client.handler.QuitGroupResponseHandler;
 import demo.im.codec.PacketCodecHandler;
 import demo.im.codec.Spliter;
+import demo.im.handler.IMIdleStateHandler;
 import demo.im.util.SessionUtil;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
@@ -42,6 +44,7 @@ public class NettyClient {
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel ch) {
+                        ch.pipeline().addLast(new IMIdleStateHandler());
                         ch.pipeline().addLast(new Spliter());
                         ch.pipeline().addLast(PacketCodecHandler.INSTANCE);
                         ch.pipeline().addLast(LoginResponseHandler.INSTANCE);
@@ -52,6 +55,7 @@ public class NettyClient {
                         ch.pipeline().addLast(ListGroupMembersResponseHandler.INSTANCE);
                         ch.pipeline().addLast(GroupMessageResponseHandler.INSTANCE);
                         ch.pipeline().addLast(LogoutResponseHandler.INSTANCE);
+                        ch.pipeline().addLast(new HeartBeatTimerHandler());
                     }
                 });
         connect(b, "localhost", 8080, MAX_RETRY);
