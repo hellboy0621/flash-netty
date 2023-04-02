@@ -25,3 +25,8 @@ demo包下为练习代码。
 3. 服务端创建对应的 XxxRequestHandler，并将其添加到服务端的 pipeline，处理完成后，构造对应的 XxxResponsePacket 发送给客户端；
 4. 客户端创建对应的 XxxResponseHandler，并将其添加到客户端的 pipeline，完成响应的处理；
 5. 最容易被忽略的，新增加的 XxxXxxPacket，需要完善编解码器 PacketCodec；
+
+ctx.writeAndFlush() 方法从 Pipeline 链中当前节点开始，往前找到第一个 Outbound 类型的 Handler，把对象往前传播。
+ctx.channel().writeAndFlush() 方法从 Pipeline 链中的最后一个 Outbound 类型的 Handler 开始，把对象往前传播。
+
+改造编解码器之后，即使用 PacketCodecHandler 统一编解码，既属于 Inbound 又属于 Outbound 类型的 Handler，已处于 Pipeline 最前面，所以可以大胆使用 ctx.writeAndFlush() 方法。
