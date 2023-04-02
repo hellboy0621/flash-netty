@@ -4,6 +4,7 @@ import demo.im.client.console.ConsoleCommandManager;
 import demo.im.client.console.LoginConsoleCommand;
 import demo.im.client.handler.CreateGroupResponseHandler;
 import demo.im.client.handler.JoinGroupResponseHandler;
+import demo.im.client.handler.ListGroupMembersResponseHandler;
 import demo.im.client.handler.LoginResponseHandler;
 import demo.im.client.handler.MessageResponseHandler;
 import demo.im.client.handler.QuitGroupResponseHandler;
@@ -47,6 +48,7 @@ public class NettyClient {
                         ch.pipeline().addLast(new CreateGroupResponseHandler());
                         ch.pipeline().addLast(new JoinGroupResponseHandler());
                         ch.pipeline().addLast(new QuitGroupResponseHandler());
+                        ch.pipeline().addLast(new ListGroupMembersResponseHandler());
                         ch.pipeline().addLast(new PacketEncoder());
                     }
                 });
