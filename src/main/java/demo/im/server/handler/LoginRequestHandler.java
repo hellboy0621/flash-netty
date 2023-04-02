@@ -5,12 +5,22 @@ import demo.im.protocol.response.LoginResponsePacket;
 import demo.im.session.Session;
 import demo.im.util.IdUtil;
 import demo.im.util.SessionUtil;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+// 1 增加注解，表明该 Handler 可以被多个 Channel 共享
+@ChannelHandler.Sharable
 public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginRequestPacket> {
+
+    // 2 构造单例
+    public static final LoginRequestHandler INSTANCE = new LoginRequestHandler();
+
+    protected LoginRequestHandler() {
+    }
+
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, LoginRequestPacket loginRequestPacket) throws Exception {
         log.info("client start login {}", loginRequestPacket.getUsername());

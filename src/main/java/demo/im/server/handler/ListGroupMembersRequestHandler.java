@@ -4,13 +4,20 @@ import demo.im.protocol.request.ListGroupMembersRequestPacket;
 import demo.im.protocol.response.ListGroupMembersResponsePacket;
 import demo.im.session.Session;
 import demo.im.util.SessionUtil;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.group.ChannelGroup;
 
 import java.util.List;
 
+@ChannelHandler.Sharable
 public class ListGroupMembersRequestHandler extends SimpleChannelInboundHandler<ListGroupMembersRequestPacket> {
+    public static final ListGroupMembersRequestHandler INSTANCE = new ListGroupMembersRequestHandler();
+
+    protected ListGroupMembersRequestHandler() {
+    }
+
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, ListGroupMembersRequestPacket listGroupMembersRequestPacket) throws Exception {
         // 1 获取群的 ChannelGroup
