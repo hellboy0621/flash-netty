@@ -3,15 +3,21 @@ package demo.im.client.handler;
 import demo.im.protocol.response.LoginResponsePacket;
 import demo.im.session.Session;
 import demo.im.util.SessionUtil;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@ChannelHandler.Sharable
 public class LoginResponseHandler extends SimpleChannelInboundHandler<LoginResponsePacket> {
+    public static final LoginResponseHandler INSTANCE = new LoginResponseHandler();
+
+    protected LoginResponseHandler() {
+    }
 
     @Override
-    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+    public void channelInactive(ChannelHandlerContext ctx) {
         log.info("client channel closed by server");
     }
 

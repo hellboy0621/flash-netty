@@ -1,12 +1,19 @@
 package demo.im.client.handler;
 
 import demo.im.protocol.response.CreateGroupResponsePacket;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@ChannelHandler.Sharable
 public class CreateGroupResponseHandler extends SimpleChannelInboundHandler<CreateGroupResponsePacket> {
+    public static final CreateGroupResponseHandler INSTANCE = new CreateGroupResponseHandler();
+
+    protected CreateGroupResponseHandler() {
+    }
+
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, CreateGroupResponsePacket createGroupResponsePacket) throws Exception {
         log.info("group create success, id : {}", createGroupResponsePacket.getGroupId());
