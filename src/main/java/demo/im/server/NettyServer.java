@@ -1,7 +1,6 @@
 package demo.im.server;
 
-import demo.im.codec.PacketDecoder;
-import demo.im.codec.PacketEncoder;
+import demo.im.codec.PacketCodecHandler;
 import demo.im.codec.Spliter;
 import demo.im.server.handler.AuthHandler;
 import demo.im.server.handler.CreateGroupRequestHandler;
@@ -35,7 +34,7 @@ public class NettyServer {
                     @Override
                     protected void initChannel(NioSocketChannel ch) {
                         ch.pipeline().addLast(new Spliter());
-                        ch.pipeline().addLast(new PacketDecoder());
+                        ch.pipeline().addLast(PacketCodecHandler.INSTANCE);
                         ch.pipeline().addLast(LoginRequestHandler.INSTANCE);
                         ch.pipeline().addLast(AuthHandler.INSTANCE);
                         ch.pipeline().addLast(MessageRequestHandler.INSTANCE);
@@ -44,7 +43,6 @@ public class NettyServer {
                         ch.pipeline().addLast(QuitGroupRequestHandler.INSTANCE);
                         ch.pipeline().addLast(ListGroupMembersRequestHandler.INSTANCE);
                         ch.pipeline().addLast(GroupMessageRequestHandler.INSTANCE);
-                        ch.pipeline().addLast(new PacketEncoder());
                     }
                 });
         bind(b, 8080);

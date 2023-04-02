@@ -9,8 +9,7 @@ import demo.im.client.handler.ListGroupMembersResponseHandler;
 import demo.im.client.handler.LoginResponseHandler;
 import demo.im.client.handler.MessageResponseHandler;
 import demo.im.client.handler.QuitGroupResponseHandler;
-import demo.im.codec.PacketDecoder;
-import demo.im.codec.PacketEncoder;
+import demo.im.codec.PacketCodecHandler;
 import demo.im.codec.Spliter;
 import demo.im.util.SessionUtil;
 import io.netty.bootstrap.Bootstrap;
@@ -43,7 +42,7 @@ public class NettyClient {
                     @Override
                     protected void initChannel(SocketChannel ch) {
                         ch.pipeline().addLast(new Spliter());
-                        ch.pipeline().addLast(new PacketDecoder());
+                        ch.pipeline().addLast(PacketCodecHandler.INSTANCE);
                         ch.pipeline().addLast(LoginResponseHandler.INSTANCE);
                         ch.pipeline().addLast(MessageResponseHandler.INSTANCE);
                         ch.pipeline().addLast(CreateGroupResponseHandler.INSTANCE);
@@ -51,7 +50,6 @@ public class NettyClient {
                         ch.pipeline().addLast(QuitGroupResponseHandler.INSTANCE);
                         ch.pipeline().addLast(ListGroupMembersResponseHandler.INSTANCE);
                         ch.pipeline().addLast(GroupMessageResponseHandler.INSTANCE);
-                        ch.pipeline().addLast(new PacketEncoder());
                     }
                 });
         connect(b, "localhost", 8080, MAX_RETRY);
