@@ -3,13 +3,8 @@ package demo.im.server;
 import demo.im.codec.PacketCodecHandler;
 import demo.im.codec.Spliter;
 import demo.im.server.handler.AuthHandler;
-import demo.im.server.handler.CreateGroupRequestHandler;
-import demo.im.server.handler.GroupMessageRequestHandler;
-import demo.im.server.handler.JoinGroupRequestHandler;
-import demo.im.server.handler.ListGroupMembersRequestHandler;
+import demo.im.server.handler.IMHandler;
 import demo.im.server.handler.LoginRequestHandler;
-import demo.im.server.handler.MessageRequestHandler;
-import demo.im.server.handler.QuitGroupRequestHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
@@ -37,12 +32,7 @@ public class NettyServer {
                         ch.pipeline().addLast(PacketCodecHandler.INSTANCE);
                         ch.pipeline().addLast(LoginRequestHandler.INSTANCE);
                         ch.pipeline().addLast(AuthHandler.INSTANCE);
-                        ch.pipeline().addLast(MessageRequestHandler.INSTANCE);
-                        ch.pipeline().addLast(CreateGroupRequestHandler.INSTANCE);
-                        ch.pipeline().addLast(JoinGroupRequestHandler.INSTANCE);
-                        ch.pipeline().addLast(QuitGroupRequestHandler.INSTANCE);
-                        ch.pipeline().addLast(ListGroupMembersRequestHandler.INSTANCE);
-                        ch.pipeline().addLast(GroupMessageRequestHandler.INSTANCE);
+                        ch.pipeline().addLast(IMHandler.INSTANCE);
                     }
                 });
         bind(b, 8080);
