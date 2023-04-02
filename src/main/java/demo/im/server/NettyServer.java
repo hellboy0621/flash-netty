@@ -5,6 +5,7 @@ import demo.im.codec.PacketEncoder;
 import demo.im.codec.Spliter;
 import demo.im.server.handler.AuthHandler;
 import demo.im.server.handler.CreateGroupRequestHandler;
+import demo.im.server.handler.JoinGroupRequestHandler;
 import demo.im.server.handler.LoginRequestHandler;
 import demo.im.server.handler.MessageRequestHandler;
 import io.netty.bootstrap.ServerBootstrap;
@@ -13,8 +14,6 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.util.concurrent.Future;
-import io.netty.util.concurrent.GenericFutureListener;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -31,13 +30,14 @@ public class NettyServer {
                 .childOption(ChannelOption.TCP_NODELAY, true)
                 .childHandler(new ChannelInitializer<NioSocketChannel>() {
                     @Override
-                    protected void initChannel(NioSocketChannel ch) throws Exception {
+                    protected void initChannel(NioSocketChannel ch) {
                         ch.pipeline().addLast(new Spliter());
                         ch.pipeline().addLast(new PacketDecoder());
                         ch.pipeline().addLast(new LoginRequestHandler());
                         ch.pipeline().addLast(new AuthHandler());
                         ch.pipeline().addLast(new MessageRequestHandler());
                         ch.pipeline().addLast(new CreateGroupRequestHandler());
+                        ch.pipeline().addLast(new JoinGroupRequestHandler());
                         ch.pipeline().addLast(new PacketEncoder());
                     }
                 });
@@ -45,15 +45,12 @@ public class NettyServer {
     }
 
     private static void bind(final ServerBootstrap b, final int port) {
-        b.bind(port).addListener(new GenericFutureListener<Future<? super Void>>() {
-            @Override
-            public void operationComplete(Future<? super Void> future) throws Exception {
-                if (future.isSuccess()) {
-                    log.info("port[{}] bind success.", port);
-                } else {
-                    log.error("port[{}] bind fail.", port);
-                    bind(b, port + 1);
-                }
+        b.bind(port).addListener(future -> {
+            if (future.isSuccess()) {
+                log.info("port[{}] bind success.", port);
+            } else {
+                log.error("port[{}] bind fail.", port);
+                bind(b, port + 1);
             }
         });
     }

@@ -20,7 +20,7 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
         if (valid(loginRequestPacket)) {
             // 校验成功
             loginResponsePacket.setSuccess(true);
-            String userId = IdUtil.randomUserId();
+            String userId = IdUtil.randomId();
             loginResponsePacket.setUserId(userId);
             loginResponsePacket.setUserName(loginRequestPacket.getUsername());
             log.info("client[{}] login success, userId : {}", loginRequestPacket.getUsername(), userId);
@@ -37,12 +37,12 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
         ctx.channel().writeAndFlush(loginResponsePacket);
     }
 
-    private boolean valid(demo.im.protocol.request.LoginRequestPacket loginRequestPacket) {
+    private boolean valid(LoginRequestPacket loginRequestPacket) {
         return true;
     }
 
     @Override
-    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+    public void channelInactive(ChannelHandlerContext ctx) {
         // 用户断线之后取消绑定
         SessionUtil.unBindSession(ctx.channel());
     }

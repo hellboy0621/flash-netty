@@ -4,7 +4,7 @@ import java.util.UUID;
 
 public final class IdUtil {
 
-    public static String randomUserId() {
+    public static String randomId() {
         return UUID.randomUUID().toString().split("-")[0];
     }
 }

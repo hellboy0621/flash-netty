@@ -3,6 +3,7 @@ package demo.im.client;
 import demo.im.client.console.ConsoleCommandManager;
 import demo.im.client.console.LoginConsoleCommand;
 import demo.im.client.handler.CreateGroupResponseHandler;
+import demo.im.client.handler.JoinGroupResponseHandler;
 import demo.im.client.handler.LoginResponseHandler;
 import demo.im.client.handler.MessageResponseHandler;
 import demo.im.codec.PacketDecoder;
@@ -37,12 +38,13 @@ public class NettyClient {
                 .option(ChannelOption.TCP_NODELAY, true)
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
-                    protected void initChannel(SocketChannel ch) throws Exception {
+                    protected void initChannel(SocketChannel ch) {
                         ch.pipeline().addLast(new Spliter());
                         ch.pipeline().addLast(new PacketDecoder());
                         ch.pipeline().addLast(new LoginResponseHandler());
                         ch.pipeline().addLast(new MessageResponseHandler());
                         ch.pipeline().addLast(new CreateGroupResponseHandler());
+                        ch.pipeline().addLast(new JoinGroupResponseHandler());
                         ch.pipeline().addLast(new PacketEncoder());
                     }
                 });
@@ -61,9 +63,8 @@ public class NettyClient {
                 int order = MAX_RETRY - retry;
                 int delay = 1 << order;
                 log.info("connect fail, retry :{}", order);
-                b.config().group().schedule(() -> {
-                    connect(b, host, port + 1, retry - 1);
-                }, delay, TimeUnit.SECONDS);
+                b.config().group().schedule(() -> connect(b, host, port + 1, retry - 1),
+                        delay, TimeUnit.SECONDS);
             }
         });
     }

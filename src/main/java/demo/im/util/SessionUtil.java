@@ -3,6 +3,7 @@ package demo.im.util;
 import demo.im.attribute.Attributes;
 import demo.im.session.Session;
 import io.netty.channel.Channel;
+import io.netty.channel.group.ChannelGroup;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
@@ -12,6 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class SessionUtil {
 
     private static final Map<String, Channel> userIdToChannel = new ConcurrentHashMap<>();
+    private static final Map<String, ChannelGroup> groupIdToChannelGroup = new ConcurrentHashMap<>();
 
     public static void bindSession(Session session, Channel channel) {
         userIdToChannel.put(session.getUserId(), channel);
@@ -37,6 +39,14 @@ public class SessionUtil {
 
     public static Channel getChannel(String userId) {
         return userIdToChannel.get(userId);
+    }
+
+    public static void bindGroupSession(String groupId, ChannelGroup channelGroup) {
+        groupIdToChannelGroup.put(groupId, channelGroup);
+    }
+
+    public static ChannelGroup getChannelGroup(String groupId) {
+        return groupIdToChannelGroup.get(groupId);
     }
 
 }

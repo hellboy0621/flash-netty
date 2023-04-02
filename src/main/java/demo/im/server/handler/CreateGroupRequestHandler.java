@@ -34,8 +34,9 @@ public class CreateGroupRequestHandler extends SimpleChannelInboundHandler<Creat
         }
 
         // 3 创建群聊创建结果的响应
+        String groupId = IdUtil.randomId();
         final CreateGroupResponsePacket createGroupResponsePacket = CreateGroupResponsePacket.builder()
-                .groupId(IdUtil.randomUserId())
+                .groupId(groupId)
                 .success(true)
                 .userNames(userNames)
                 .build();
@@ -46,5 +47,7 @@ public class CreateGroupRequestHandler extends SimpleChannelInboundHandler<Creat
 
         log.info("group create success, id : {}", createGroupResponsePacket.getGroupId());
         log.info("group contains userNames : {}", userNames);
+
+        SessionUtil.bindGroupSession(groupId, channelGroup);
     }
 }
