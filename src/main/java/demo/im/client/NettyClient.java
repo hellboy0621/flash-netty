@@ -7,6 +7,7 @@ import demo.im.client.handler.GroupMessageResponseHandler;
 import demo.im.client.handler.JoinGroupResponseHandler;
 import demo.im.client.handler.ListGroupMembersResponseHandler;
 import demo.im.client.handler.LoginResponseHandler;
+import demo.im.client.handler.LogoutResponseHandler;
 import demo.im.client.handler.MessageResponseHandler;
 import demo.im.client.handler.QuitGroupResponseHandler;
 import demo.im.codec.PacketCodecHandler;
@@ -50,6 +51,7 @@ public class NettyClient {
                         ch.pipeline().addLast(QuitGroupResponseHandler.INSTANCE);
                         ch.pipeline().addLast(ListGroupMembersResponseHandler.INSTANCE);
                         ch.pipeline().addLast(GroupMessageResponseHandler.INSTANCE);
+                        ch.pipeline().addLast(LogoutResponseHandler.INSTANCE);
                     }
                 });
         connect(b, "localhost", 8080, MAX_RETRY);
