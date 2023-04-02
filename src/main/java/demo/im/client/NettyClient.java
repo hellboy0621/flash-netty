@@ -6,6 +6,7 @@ import demo.im.client.handler.CreateGroupResponseHandler;
 import demo.im.client.handler.JoinGroupResponseHandler;
 import demo.im.client.handler.LoginResponseHandler;
 import demo.im.client.handler.MessageResponseHandler;
+import demo.im.client.handler.QuitGroupResponseHandler;
 import demo.im.codec.PacketDecoder;
 import demo.im.codec.PacketEncoder;
 import demo.im.codec.Spliter;
@@ -45,6 +46,7 @@ public class NettyClient {
                         ch.pipeline().addLast(new MessageResponseHandler());
                         ch.pipeline().addLast(new CreateGroupResponseHandler());
                         ch.pipeline().addLast(new JoinGroupResponseHandler());
+                        ch.pipeline().addLast(new QuitGroupResponseHandler());
                         ch.pipeline().addLast(new PacketEncoder());
                     }
                 });

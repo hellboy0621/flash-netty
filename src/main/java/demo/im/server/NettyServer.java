@@ -8,6 +8,7 @@ import demo.im.server.handler.CreateGroupRequestHandler;
 import demo.im.server.handler.JoinGroupRequestHandler;
 import demo.im.server.handler.LoginRequestHandler;
 import demo.im.server.handler.MessageRequestHandler;
+import demo.im.server.handler.QuitGroupRequestHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
@@ -38,6 +39,7 @@ public class NettyServer {
                         ch.pipeline().addLast(new MessageRequestHandler());
                         ch.pipeline().addLast(new CreateGroupRequestHandler());
                         ch.pipeline().addLast(new JoinGroupRequestHandler());
+                        ch.pipeline().addLast(new QuitGroupRequestHandler());
                         ch.pipeline().addLast(new PacketEncoder());
                     }
                 });
